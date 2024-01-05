@@ -11,11 +11,11 @@ class Account extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome',
-        'banco',
-        'tipo',
-        'saldo',
-        'vencimento'
+        'name',
+        'bank',
+        'type',
+        'balance',
+        'due_date'
     ];
 
     public function user(): BelongsTo

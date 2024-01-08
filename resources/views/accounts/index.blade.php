@@ -19,8 +19,8 @@
                 <td>{{ $account->balance }}</td>
                 <td>{{ $account->due_date }}</td>
                 <td>
-                    <a href="{{ route('accounts.show', $account) }}">Ver</a>
-                    <a href="{{ route('accounts.edit', $account) }}">Editar</a>
+                    <a href="{{ route('accounts.show', $account->id) }}">Ver</a>
+                    <a href="{{ route('accounts.edit', $account->id) }}">Editar</a>
                 </td>
             </tr>
         @empty

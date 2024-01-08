@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Account $account, Request $request)
+    public function index(Account $account)
     {
-        $accounts = Account::with('user')->get();
+        $accounts = $account->all()->where('user_id', Auth::user()->id);
 
         return view('accounts/index', compact('accounts'));
     }
@@ -30,7 +31,7 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $data = $request->all();
         $request->user()->accounts()->create($data);
@@ -41,21 +42,29 @@ class AccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Account $account): RedirectResponse
+    public function show(string $id)
     {
-        dd($account);
-        if (!$account) {
-            return redirect()->route('accounts.index');
+        if (!$account = Account::findOrFail($id)) {
+            return back();
         }
-        dd($account->id);
+
+        if ($account->user_id !== Auth::user()->id) {
+            return back();
+        }
+
+        return view('accounts/show', compact('account'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Account $account)
+    public function edit(string $id)
     {
-        //
+        if (!$account = Account::finOrFail($id)) {
+            return back();
+        }
+
+        return view('accounts/edit', compact('account'));
     }
 
     /**
@@ -71,6 +80,6 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        dd($account);
     }
 }

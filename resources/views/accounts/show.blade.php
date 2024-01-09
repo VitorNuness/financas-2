@@ -8,3 +8,4 @@
 </ul>
 
 <a href="{{ route('accounts.index') }}">Voltar</a>
+<a href="{{ route('accounts.edit', $account->id) }}">Editar</a>

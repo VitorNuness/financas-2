@@ -60,7 +60,11 @@ class AccountController extends Controller
      */
     public function edit(string $id)
     {
-        if (!$account = Account::finOrFail($id)) {
+        if (!$account = Account::findOrFail($id)) {
+            return back();
+        }
+
+        if ($account->user_id !== Auth::user()->id) {
             return back();
         }
 
@@ -70,9 +74,21 @@ class AccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Account $account)
+    public function update(Request $request, string $id)
     {
-        //
+        if (!$account = Account::findOrFail($id)) {
+            return back();
+        }
+
+        if ($account->user_id !== Auth::user()->id) {
+            return back();
+        }
+
+        $account->update($request->only([
+            'name', 'bank', 'type', 'balance', 'due_date'
+        ]));
+
+        return view('accounts/show', compact('account'));
     }
 
     /**

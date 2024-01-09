@@ -1,5 +1,13 @@
 <h1>Editando Conta: {{ $account->name }}</h1>
 
+@if ($errors->any())
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+@endif
+
 <form action="{{ route('accounts.update', $account->id) }}" method="POST">
     @csrf
     @method('PUT')
@@ -11,7 +19,7 @@
         <option value="credit">Cartão de Crédito</option>
         <option value="outhers">Outro</option>
     </select>
-    <input type="number" name="balance" placeholder="Ex. 0,00" value="{{ $account->balance }}">
+    <input type="number" name="balance" placeholder="Ex. 0,00" step="0.01" value="{{ $account->balance }}">
     <input type="number" name="due_date" placeholder="Ex. 10" value="{{ $account->due_date }}">
     <button type="submit">Salvar</button>
 </form>

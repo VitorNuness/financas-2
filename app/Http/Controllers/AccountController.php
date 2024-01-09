@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateAccountRequest;
 use App\Models\Account;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class AccountController extends Controller
 {
@@ -31,9 +29,9 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUpdateAccountRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $request->user()->accounts()->create($data);
 
         return redirect()->route('accounts.index');
@@ -74,7 +72,7 @@ class AccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreUpdateAccountRequest $request, string $id)
     {
         if (!$account = Account::findOrFail($id)) {
             return back();
@@ -84,9 +82,7 @@ class AccountController extends Controller
             return back();
         }
 
-        $account->update($request->only([
-            'name', 'bank', 'type', 'balance', 'due_date'
-        ]));
+        $account->update($request->validated());
 
         return view('accounts/show', compact('account'));
     }

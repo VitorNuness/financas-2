@@ -13,13 +13,13 @@
     <tbody>
         @forelse ($accounts as $account)
             <tr>
-                <td>{{ $account->name }}</td>
-                <td>{{ $account->bank }}</td>
-                <td>{{ $account->type }}</td>
-                <td>{{ $account->balance }}</td>
-                <td>{{ $account->due_date }}</td>
+                <td>{{ $account['name'] }}</td>
+                <td>{{ $account['bank'] }}</td>
+                <td>{{ $account['type'] }}</td>
+                <td>{{ $account['balance'] }}</td>
+                <td>{{ $account['due_date'] }}</td>
                 <td>
-                    <a href="{{ route('accounts.show', $account->id) }}">Ver</a>
+                    <a href="{{ route('accounts.show', $account['id']) }}">Ver</a>
                 </td>
             </tr>
         @empty

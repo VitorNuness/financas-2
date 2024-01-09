@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOS\CreateAccountDTO;
+use App\DTOS\UpdateAccountDTO;
 use App\Http\Requests\StoreUpdateAccountRequest;
 use App\Models\Account;
+use App\Services\AccountService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
+    public function __construct(
+        protected AccountService $service
+    ){}
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Account $account)
+    public function index(Request $request)
     {
-        $accounts = $account->all()->where('user_id', Auth::user()->id);
+        $accounts = $this->service->getAll($request->filter);
 
         return view('accounts/index', compact('accounts'));
     }
@@ -31,8 +39,7 @@ class AccountController extends Controller
      */
     public function store(StoreUpdateAccountRequest $request)
     {
-        $data = $request->validated();
-        $request->user()->accounts()->create($data);
+        $this->service->new(CreateAccountDTO::makeFromRequest($request));
 
         return redirect()->route('accounts.index');
     }
@@ -42,7 +49,7 @@ class AccountController extends Controller
      */
     public function show(string $id)
     {
-        if (!$account = Account::findOrFail($id)) {
+        if (!$account = $this->service->findOne($id)) {
             return back();
         }
 
@@ -58,7 +65,7 @@ class AccountController extends Controller
      */
     public function edit(string $id)
     {
-        if (!$account = Account::findOrFail($id)) {
+        if (!$account = $this->service->findOne($id)) {
             return back();
         }
 
@@ -72,17 +79,13 @@ class AccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreUpdateAccountRequest $request, string $id)
+    public function update(StoreUpdateAccountRequest $request)
     {
-        if (!$account = Account::findOrFail($id)) {
+        $account = $this->service->update(UpdateAccountDTO::makeFromRequest($request));
+
+        if (!$account) {
             return back();
         }
-
-        if ($account->user_id !== Auth::user()->id) {
-            return back();
-        }
-
-        $account->update($request->validated());
 
         return view('accounts/show', compact('account'));
     }
@@ -92,15 +95,7 @@ class AccountController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!$account = Account::findOrFail($id)) {
-            return back();
-        }
-
-        if ($account->user_id !== Auth::user()->id) {
-            return back();
-        }
-
-        $account->delete();
+        $this->service->delete($id);
 
         return redirect()->route('accounts.index');
     }

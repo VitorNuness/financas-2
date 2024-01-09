@@ -23,8 +23,6 @@ class StoreUpdateAccountRequest extends FormRequest
      */
     public function rules(): array
     {
-        
-        dd($this->id);
         $rules = [
             'name' => ['required', 'min:3', 'max:50', Rule::unique('accounts')->where('user_id', Auth::user()->id)],
             'bank' => ['required', 'min:3', 'max:50'],
@@ -38,7 +36,7 @@ class StoreUpdateAccountRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:50',
-                Rule::unique('accounts')->ignore($this->id),
+                Rule::unique('accounts')->ignore($this->id)->where('user_id', Auth::user()->id),
             ];
         }
 

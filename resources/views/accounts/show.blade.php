@@ -9,3 +9,8 @@
 
 <a href="{{ route('accounts.index') }}">Voltar</a>
 <a href="{{ route('accounts.edit', $account->id) }}">Editar</a>
+<form action="{{ route('accounts.destroy', $account->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Deletar</button>
+</form>

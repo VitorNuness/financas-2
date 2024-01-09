@@ -94,8 +94,18 @@ class AccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Account $account)
+    public function destroy(string $id)
     {
-        dd($account);
+        if (!$account = Account::findOrFail($id)) {
+            return back();
+        }
+
+        if ($account->user_id !== Auth::user()->id) {
+            return back();
+        }
+
+        $account->delete();
+
+        return redirect()->route('accounts.index');
     }
 }

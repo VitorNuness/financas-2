@@ -21,7 +21,11 @@ class AccountController extends Controller
      */
     public function index(Request $request)
     {
-        $accounts = $this->service->getAll($request->filter);
+        $accounts = $this->service->paginate(
+            page: $request->get('page', 1),
+            totalPerPage: $request->get('per_page', 15),
+            filter: $request->filter,
+        );
 
         return view('accounts/index', compact('accounts'));
     }

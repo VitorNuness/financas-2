@@ -8,6 +8,8 @@ use App\DTOS\{
 };
 use App\Models\Account;
 use App\Repositories\Interfaces\AccountRepositoryInterface;
+use App\Repositories\Interfaces\PaginationInterface;
+use App\Repositories\Presenters\PaginationPresenter;
 use Illuminate\Support\Facades\Auth;
 use stdClass;
 
@@ -17,6 +19,21 @@ class AccountEloquentORM implements AccountRepositoryInterface
         protected Account $model,
     )
     {}
+
+    public function paginate(int $page = 1, int $totalPerPage = 15, string $filter = null): PaginationInterface
+    {
+        $result = $this->model
+                        ->where(function ($query) use ($filter) {
+                            $query->where('user_id', Auth::user()->id);
+                            if ($filter) {
+                                $query->orWhere('name', 'like', "%{$filter}%");
+                                $query->orWhere('bank', 'like', "%{$filter}%");
+                            }
+                        })
+                        ->paginate($totalPerPage, ['*'], 'page', $page);
+                        
+        return new PaginationPresenter($result);
+    }
 
     public function getAll(string $filter = null): array
     {

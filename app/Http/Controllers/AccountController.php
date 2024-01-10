@@ -27,7 +27,9 @@ class AccountController extends Controller
             filter: $request->filter,
         );
 
-        return view('accounts/index', compact('accounts'));
+        $filters = ['filter' => $request->get('filter')];
+
+        return view('accounts/index', compact('accounts', 'filters'));
     }
 
     /**

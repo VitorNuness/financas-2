@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DTOS\{
+use App\DTOS\Accounts\{
     CreateAccountDTO,
     UpdateAccountDTO
 };

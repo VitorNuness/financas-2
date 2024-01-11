@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOS\CreateAccountDTO;
-use App\DTOS\UpdateAccountDTO;
+use App\DTOS\Accounts\{
+    CreateAccountDTO,
+    UpdateAccountDTO
+};
 use App\Http\Requests\StoreUpdateAccountRequest;
-use App\Models\Account;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class AccountController extends Controller
     {
         $accounts = $this->service->paginate(
             page: $request->get('page', 1),
-            totalPerPage: $request->get('per_page', 15),
+            totalPerPage: $request->get('per_page', 5),
             filter: $request->filter,
         );
 

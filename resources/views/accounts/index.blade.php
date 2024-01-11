@@ -15,7 +15,7 @@
             <tr>
                 <td>{{ $account->name }}</td>
                 <td>{{ $account->bank }}</td>
-                <td>{{ $account->type }}</td>
+                <td>{{ getAccountType($account->type) }}</td>
                 <td>{{ $account->balance }}</td>
                 <td>{{ $account->due_date }}</td>
                 <td>

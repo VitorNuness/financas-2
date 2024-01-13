@@ -2,6 +2,7 @@
 
 namespace App\DTOS\Accounts;
 
+use App\Enums\AccountTypes;
 use App\Http\Requests\StoreUpdateAccountRequest;
 
 class UpdateAccountDTO
@@ -10,7 +11,7 @@ class UpdateAccountDTO
         public string $id,
         public string $name,
         public string $bank,
-        public string $type,
+        public AccountTypes $type,
         public float|null $balance,
         public int|null $due_date,
     ) {}
@@ -21,7 +22,7 @@ class UpdateAccountDTO
             $request->id,
             $request->name,
             $request->bank,
-            $request->type,
+            getAccountTypeName($request->type),
             $request->balance,
             $request->due_date,
         );

@@ -5,7 +5,7 @@
 <ul>
     <li>{{ $account->name }}</li>
     <li>{{ $account->bank }}</li>
-    <li>{{ $account->type }}</li>
+    <li>{{ getAccountType($account->type) }}</li>
     <li>{{ $account->balance }}</li>
     <li>{{ $account->due_date }}</li>
 </ul>
